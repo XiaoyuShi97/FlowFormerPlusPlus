@@ -5,12 +5,7 @@
 > Xiaoyu Shi<sup>\*</sup>, [Zhaoyang Huang](https://drinkingcoder.github.io)<sup>\*</sup>, [Dasong Li](https://dasongli1.github.io/), [Manyuan Zhang](https://manyuan97.github.io/), Ka Chun Cheung, Simon See, [Hongwei Qin](http://qinhongwei.com/academic/), [Jifeng Dai](https://jifengdai.org/), [Hongsheng Li](https://www.ee.cuhk.edu.hk/~hsli/)  
 > CVPR 2023  
 
-
-<!-- <img src="assets/teaser.png">
-
-## TODO List
-- [x] Code release (2022-8-1)
-- [x] Models release (2022-8-1) -->
+<img src="assets/demo.png">
 
 ## Data Preparation
 Similar to RAFT, to evaluate/train FlowFormer, you will need to download the required datasets. 
