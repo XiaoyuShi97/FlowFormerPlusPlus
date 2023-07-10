@@ -88,7 +88,7 @@ class FlowDataset(data.Dataset):
 
         # load mask
         _index = _index % 100000
-        mask_file = "s3://mae_mask/mask_46_62_48_{:06d}.npy".format(_index)
+        mask_file = "mae_mask/mask_46_62_48_{:06d}.npy".format(_index)
         mask = frame_utils.read_gen(mask_file)
         mask = torch.from_numpy(mask)
 
@@ -116,53 +116,8 @@ class YoutubeVOS(FlowDataset):
                 image_list = sorted(glob(osp.join(dir_root, dir, '*.jpg')))
 
                 for i in range(9, len(image_list)-1, 3):
-                    self.image_list += [[image_list[i-9].replace("/mnt/lustre/share_data/shixiaoyu/", "s3://"), image_list[i].replace("/mnt/lustre/share_data/shixiaoyu/", "s3://")]]
-                    self.image_list += [[image_list[i].replace("/mnt/lustre/share_data/shixiaoyu/", "s3://"), image_list[i-9].replace("/mnt/lustre/share_data/shixiaoyu/", "s3://")]]
-        print(self.image_list[:4])
-
-class Animation(FlowDataset):
-    def __init__(self, aug_params=None):
-        super(Animation, self).__init__(aug_params)
-
-        root = 's3://'
-
-        with open("./flow_dataset/animation_data/animation_data_list.txt") as f:
-            images = f.readlines()
-            images = [root+img.strip() for img in images]
-        
-        for i in range(0, len(images)-1, 2):
-            self.image_list.append([images[i], images[i+1]])
-            self.image_list.append([images[i+1], images[i]])
-        print(self.image_list[:4])
-
-class Got10k(FlowDataset):
-    def __init__(self, aug_params=None):
-        super(Got10k, self).__init__(aug_params)
-        
-        root = 's3://production-public-got-10k/'
-
-        with open("./flow_dataset/got10k/got-10k.txt") as f:
-            images = f.readlines()
-            images = [root+img.strip() for img in images]
-        
-        for i in range(0, len(images)-1, 2):
-            self.image_list.append([images[i], images[i+1]])
-        print(self.image_list[:4])
-
-
-class SintelMovie(FlowDataset):
-    def __init__(self, aug_params=None):
-        super(SintelMovie, self).__init__(aug_params)
-
-        root = 's3://'
-
-        with open("./flow_dataset/animation_data/sintel_movie_data_list.txt") as f:
-            images = f.readlines()
-            images = [root+img.strip() for img in images]
-        
-        for i in range(0, len(images)-1, 2):
-            self.image_list.append([images[i], images[i+1]])
-            self.image_list.append([images[i+1], images[i]])
+                    self.image_list += [[image_list[i-9], image_list[i]]]
+                    self.image_list += [[image_list[i], image_list[i-9]]]
         print(self.image_list[:4])
        
 
@@ -172,18 +127,6 @@ def fetch_dataloader(args, TRAIN_DS='C+T+K+S+H'):
     if args.stage == 'youtube':
         aug_params = {'crop_size': args.image_size, 'min_scale': -0.2, 'max_scale': 0.6, 'do_flip': True}
         train_dataset = YoutubeVOS(aug_params)
-    elif args.stage == 'animation':
-        aug_params = {'crop_size': args.image_size, 'min_scale': -0.2, 'max_scale': 0.6, 'do_flip': True}
-        train_dataset = Animation(aug_params)
-    elif args.stage == 'animation+youtube':
-        aug_params = {'crop_size': args.image_size, 'min_scale': -0.2, 'max_scale': 0.6, 'do_flip': True}
-        train_dataset = YoutubeVOS(aug_params) + 5 * Animation(aug_params)
-    elif args.stage == 'a+y+g':
-        aug_params = {'crop_size': args.image_size, 'min_scale': -0.2, 'max_scale': 0.6, 'do_flip': True}
-        train_dataset = YoutubeVOS(aug_params) + 5 * Animation(aug_params) + Got10k(aug_params)
-    elif args.stage == 'sintel_movie':
-        aug_params = {'crop_size': args.image_size, 'min_scale': -0.2, 'max_scale': 0.6, 'do_flip': True}
-        train_dataset = SintelMovie(aug_params)
     
     train_loader = data.DataLoader(train_dataset, batch_size=args.batch_size, 
         pin_memory=False, shuffle=True, num_workers=24, drop_last=True)
