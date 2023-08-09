@@ -16,7 +16,7 @@ _CN.critical_params = []
 _CN.transformer = 'percostformer3'
 
 ### change the path here
-_CN.restore_ckpt = "logs/PATH-TO-FINAL-FILE/final"
+_CN.model = "logs/PATH-TO-FINAL-FILE/final"
 
 _CN.percostformer3 = CN()
 _CN.percostformer3.pe = 'linear'
@@ -39,7 +39,7 @@ _CN.percostformer3.attn_dim = 128
 _CN.percostformer3.patch_size = 8
 _CN.percostformer3.patch_embed = 'single'
 _CN.percostformer3.cross_attn = "all"
-_CN.percostformer3.gma = "GMA-SK"
+_CN.percostformer3.gma = "GMA"
 _CN.percostformer3.vert_c_dim = 64
 _CN.percostformer3.cost_encoder_res = True
 _CN.percostformer3.cnet = 'twins'

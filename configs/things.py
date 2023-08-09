@@ -13,6 +13,7 @@ _CN.add_noise = False
 _CN.use_smoothl1 = False
 _CN.critical_params = []
 
+_CN.transformer = 'percostformer3'
 ### change the path here
 _CN.restore_ckpt = "logs/PATH-TO-FINAL-FILE/final"
 
@@ -32,7 +33,7 @@ _CN.percostformer3.del_layers = True
 _CN.percostformer3.encoder_depth = 3
 _CN.percostformer3.expand_factor = 4
 _CN.percostformer3.vertical_encoder_attn = "twins"
-_CN.percostformer3.use_convertor = True
+_CN.percostformer3.use_convertor = False
 _CN.percostformer3.attn_dim = 128
 _CN.percostformer3.patch_size = 8
 _CN.percostformer3.patch_embed = 'single'

@@ -17,9 +17,6 @@ import torch.nn.functional as F
 
 from torch.utils.data import DataLoader
 from core import optimizer
-import evaluate_FlowFormer as evaluate
-import evaluate_FlowFormer_tile as evaluate_tile
-import evaluate_submission as evaluate_submission
 import core.datasets as datasets
 from core.loss import sequence_loss
 from core.loss import sequence_loss_smooth

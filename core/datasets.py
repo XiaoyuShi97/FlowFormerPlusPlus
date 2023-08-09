@@ -9,15 +9,15 @@ import random
 from glob import glob
 import os.path as osp
 
-from utils import frame_utils
-from utils.augmentor import FlowAugmentor, SparseFlowAugmentor
+from .utils import frame_utils
+from .utils.augmentor import FlowAugmentor, SparseFlowAugmentor
 #from utils import flow_transforms 
 
 from torchvision.utils import save_image
 
-from utils import flow_viz
+from .utils import flow_viz
 import cv2
-from utils.utils import coords_grid, bilinear_sampler
+from .utils.utils import coords_grid, bilinear_sampler
 
 class FlowDataset(data.Dataset):
     def __init__(self, aug_params=None, sparse=False):

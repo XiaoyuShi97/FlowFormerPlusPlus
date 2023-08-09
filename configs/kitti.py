@@ -50,6 +50,7 @@ _CN.percostformer3.use_rpe = False
 _CN.percostformer3.detach_local = False
 _CN.percostformer3.no_sc = False
 _CN.percostformer3.r_16 =-1
+_CN.percostformer3.quater_refine = False
 # pretrain config
 _CN.percostformer3.pretrain_mode = False
 _CN.percostformer3.pic_size = [368, 496, 368, 496]

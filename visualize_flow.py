@@ -10,7 +10,7 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 import matplotlib.pyplot as plt
-from configs.submission import get_cfg
+from configs.submissions import get_cfg
 from core.utils.misc import process_cfg
 import datasets
 from utils import flow_viz
