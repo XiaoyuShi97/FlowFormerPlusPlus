@@ -188,7 +188,7 @@ def create_kitti_submission(model, output_path='kitti_submission', sigma=0.05):
 @torch.no_grad()
 def validate_kitti(model, sigma=0.05):
     IMAGE_SIZE = [376, 1242]
-    TRAIN_SIZE = [376, 720]
+    TRAIN_SIZE = [288, 960]
 
     hws = compute_grid_indices(IMAGE_SIZE, TRAIN_SIZE)
     weights = compute_weight(hws, IMAGE_SIZE, TRAIN_SIZE, sigma)
@@ -199,15 +199,14 @@ def validate_kitti(model, sigma=0.05):
     for val_id in range(len(val_dataset)):
         image1, image2, flow_gt, valid_gt = val_dataset[val_id]
         new_shape = image1.shape[1:]
-        if new_shape[1] != IMAGE_SIZE[1]:
+        if new_shape[1] != IMAGE_SIZE[1] or new_shape[0] != IMAGE_SIZE[0]:
             print(f"replace {IMAGE_SIZE} with {new_shape}")
-            IMAGE_SIZE[0] = 376
+            IMAGE_SIZE[0] = new_shape[0]
             IMAGE_SIZE[1] = new_shape[1]
             hws = compute_grid_indices(IMAGE_SIZE, TRAIN_SIZE)
             weights = compute_weight(hws, IMAGE_SIZE, TRAIN_SIZE, sigma)
 
-        padder = InputPadder(image1.shape, mode='kitti376')
-        image1, image2 = padder.pad(image1[None].cuda(), image2[None].cuda())
+        image1, image2 = image1[None].cuda(), image2[None].cuda()
 
         flows = 0
         flow_count = 0
@@ -222,7 +221,7 @@ def validate_kitti(model, sigma=0.05):
             flow_count += F.pad(weights[idx], padding)
 
         flow_pre = flows / flow_count
-        flow = padder.unpad(flow_pre[0]).cpu()
+        flow = flow_pre[0].cpu()
         epe = torch.sum((flow - flow_gt)**2, dim=0).sqrt()
         mag = torch.sum(flow_gt**2, dim=0).sqrt()
 
