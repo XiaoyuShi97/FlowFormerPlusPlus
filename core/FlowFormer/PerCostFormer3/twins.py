@@ -258,8 +258,9 @@ class LocallyGroupedAttnRPEContext(nn.Module):
         H, W = size
         C_qk = C+self.vert_c_dim
 
-        context = context.repeat(B//context.shape[0], 1, 1, 1)
-        context = context.view(B, -1, H*W).permute(0, 2, 1)
+        context = context.unsqueeze(1)
+        context = context.repeat(1, B//context.shape[0], 1, 1, 1)
+        context = context.reshape(B, -1, H*W).permute(0, 2, 1)
         context = self.context_proj(context)
         context = context.view(B, H, W, -1)
 
@@ -337,10 +338,13 @@ class GlobalSubSampleAttnRPEContext(nn.Module):
         B, N, C = x.shape
         C_qk = C + self.vert_c_dim
         H, W = size
-        context = context.repeat(B//context.shape[0], 1, 1, 1)
-        context = context.view(B, -1, H*W).permute(0, 2, 1)
+
+        context = context.unsqueeze(1)
+        context = context.repeat(1, B//context.shape[0], 1, 1, 1)
+        context = context.reshape(B, -1, H*W).permute(0, 2, 1)
         context = self.context_proj(context)
         context = context.view(B, H, W, -1)
+
         x = x.view(B, H, W, C)
         x_qk = torch.cat([x, context], dim=-1)
         pad_l = pad_t = 0
